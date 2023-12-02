@@ -1,2 +1,5 @@
 # koishi-plugin-lyrics
-koishi插件，让机器人自动接下一句歌词
+
+[![npm](https://img.shields.io/npm/v/koishi-plugin-lyrics?style=flat-square)](https://www.npmjs.com/package/koishi-plugin-lyrics)
+
+发送歌词，机器人接下一句歌词
