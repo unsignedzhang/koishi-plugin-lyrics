@@ -1,0 +1,29 @@
+{
+  "name": "koishi-plugin-lyrics",
+  "description": "发送歌词，机器人接下一句歌词",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "contributors": [                         
+    "unsignedzhang <unsignedzhang@foxmail.com>"
+  ],
+  "license": "MIT",                         
+  "homepage": "https://github.com/unsignedzhang/koishi-plugin-lyrics",        
+  "repository": {                           
+    "type": "git",
+    "url": "git+https://github.com/unsignedzhang/koishi-plugin-lyrics.git"
+  },
+  "keywords": [
+    "chatbot",
+    "koishi",
+    "plugin"
+  ],
+  "peerDependencies": {
+    "@koishijs/plugin-console": "^5.19.5",
+    "koishi": "^4.15.6"
+  }
+}
