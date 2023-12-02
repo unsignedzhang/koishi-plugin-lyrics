@@ -1,6 +1,7 @@
-import { Context, Schema } from 'koishi'
+import { Context, Schema, h } from 'koishi'
 import { resolve } from 'path'
 import {} from '@koishijs/plugin-console'
+import { userInfo } from 'os'
 
 export const name = 'lyrics'
 
@@ -13,25 +14,25 @@ export const Config: Schema<Config> = Schema.object({
 })
 
 export function apply(ctx: Context, config: Config) {
-    // console.log(await handleData.getData(config.coreLoad))
-    ctx.command('接歌词 <message:string>', '发送歌词，机器人接下一句歌词').action(
+
+    ctx.command('接歌词 <message:string>', '发送歌词，机器人接下一句歌词').alias('/接歌词').action(
       async (_, message) => {
         var text = "歌词 " + message;
         const data = await ctx.http.post("https://www.sogou.com/tx?query="+text, )
         var match_lyrics = getTextBetweenMarkers(data,'<div class="lyric-box">','</div>')
-        if (!match_lyrics?.length) return `未匹配到歌词。`
+        if (!match_lyrics?.length) return `未匹配到歌词`
         console.log(match_lyrics)
         var para_lyrics:string[];
         para_lyrics = extractTextBetweenMarkers(match_lyrics,'<p class="fz-mid">','</p>')
         //console.log(para_lyrics)
         return findNextLyric(para_lyrics,"<em><!--red_beg-->"+message+"<!--red_end--></em>")
-        return '123';
     }
   )
   ctx.middleware(async (session, next) => {
-  //console.log("获取到信息"+session.content);
+  //
+  console.log("获取到信息"+session.content);
   if(config.trigger==false){
-  var text = "歌词 " + session.content;
+  var text = "歌词 " + excludeString(session.content,'<at id="'+session.selfId+'"/> ');//<at id={userId}/>
   const data = await ctx.http.post("https://www.sogou.com/tx?query="+text, )
   var match_lyrics = getTextBetweenMarkers(data,'<div class="lyric-box">','</div>')
   if (!match_lyrics?.length) return `未匹配到歌词。`
@@ -39,16 +40,9 @@ export function apply(ctx: Context, config: Config) {
   var para_lyrics:string[];
   para_lyrics = extractTextBetweenMarkers(match_lyrics,'<p class="fz-mid">','</p>')
   //console.log(para_lyrics)
-  return findNextLyric(para_lyrics,"<em><!--red_beg-->"+session.content+"<!--red_end--></em>")
+  return findNextLyric(para_lyrics,"<em><!--red_beg-->"+excludeString(session.content,'<at id="'+session.selfId+'"/> ')+"<!--red_end--></em>")
   }
 
-
- /* if (session.content === '天王盖地虎') {
-    return '宝塔镇河妖'
-  } else {
-    // 如果去掉这一行，那么不满足上述条件的消息就不会进入下一个中间件了
-    return next()
-  }*/
 })
 }
 
